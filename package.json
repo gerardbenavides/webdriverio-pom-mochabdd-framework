@@ -1,15 +1,10 @@
 {
-  "name": "automation-hope-webdriverio",
+  "name": "webdriverio-pom-mochabdd-framework",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test.regression:dev": "npm run clean.allure && wdio wdio.conf.js --suite regression_testing env=dev",
-    "test.regression:staging": "npm run clean.allure && wdio wdio.conf.js --suite regression_testing env=staging",
-    "test.regression:preprod": "npm run clean.allure && wdio wdio.conf.js --suite regression_testing env=preprod",
-    "test.regression:weekdev": "npm run clean.allure && wdio wdio.conf.js --suite regression_testing env=weekdev",
-    "test.check-disk": "wdio wdio.conf.js --spec check-disk-available.spec",
-    "test.check-providers": "wdio wdio.conf.js --spec check-provider-availability.spec",
+    "test.sample": "wdio wdio.conf.js --spec login env=uitesting",
     "report.teams": "node ./test/helpers/teams-reporter.js ../../reports/json/test-results.json",
     "report.allure": "allure generate reports/allure/result --clean -o reports/allure/report && allure open reports/allure/report",
     "clean.allure": "cleandir ./reports/allure"
