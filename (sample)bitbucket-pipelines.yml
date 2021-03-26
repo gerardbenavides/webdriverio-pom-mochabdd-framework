@@ -1,0 +1,91 @@
+image: netzonfrancis/angular-ionic3:latest
+
+clone:
+  lfs: true
+
+steps:
+  - step: &weekdev-automated-tests
+      name: (Week-dev) Run Automated Tests
+      trigger: automatic
+      artifacts:
+        - src/automated-tests/reports/**
+      image: node:10.15.3
+      caches:
+        - node
+      script:
+        - apt-get update
+
+        - apt-get install -y gconf-service libasound2 libatk1.0-0 libcairo2 libcups2 libfontconfig1 libgdk-pixbuf2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libxss1 fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils
+        - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        - dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+        
+        - export PROJECT_PATH=$BITBUCKET_CLONE_DIR/src/automated-tests/
+        - (cd $PROJECT_PATH && npm i)
+        - (cd $PROJECT_PATH && npm run test.regression:weekdev)
+
+      after-script:
+        - export PROJECT_PATH=$BITBUCKET_CLONE_DIR/src/automated-tests/
+        - (cd $PROJECT_PATH && npm run report.teams)
+  - step: &dev-automated-tests
+              name: (Dev) Run Automated Tests
+              artifacts:
+                - src/automated-tests/reports/**
+              image: node:10.15.3
+              caches:
+                - node
+              script:
+                - apt-get update
+
+                - apt-get install -y gconf-service libasound2 libatk1.0-0 libcairo2 libcups2 libfontconfig1 libgdk-pixbuf2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libxss1 fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils
+                - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+                - dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+                
+                - export PROJECT_PATH=$BITBUCKET_CLONE_DIR/src/automated-tests/
+                - (cd $PROJECT_PATH && npm i)
+                - (cd $PROJECT_PATH && npm run test.regression:dev)
+
+              after-script:
+                - export PROJECT_PATH=$BITBUCKET_CLONE_DIR/src/automated-tests/
+                - (cd $PROJECT_PATH && npm run report.teams)
+  - step: &staging-automated-tests
+      name: (Staging) Run Automated Tests
+      trigger: automatic
+      artifacts:
+        - src/automated-tests/reports/**
+      image: node:10.15.3
+      caches:
+        - node
+      script:
+        - apt-get update
+
+        - apt-get install -y gconf-service libasound2 libatk1.0-0 libcairo2 libcups2 libfontconfig1 libgdk-pixbuf2.0-0 libgtk-3-0 libnspr4 libpango-1.0-0 libxss1 fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils
+        - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+        - dpkg -i google-chrome-stable_current_amd64.deb; apt-get -fy install
+          
+        - export PROJECT_PATH=$BITBUCKET_CLONE_DIR/src/automated-tests/
+        - (cd $PROJECT_PATH && npm i)
+        - (cd $PROJECT_PATH && npm run test.regression:staging)
+
+      after-script:
+        - export PROJECT_PATH=$BITBUCKET_CLONE_DIR/src/automated-tests/
+        - (cd $PROJECT_PATH && npm run report.teams)
+pipelines:
+  #================================= Any Branch Deployment Steps =================================
+
+  branches:
+    
+    #=================================== Core Deployment Steps =====================================
+
+
+
+    #--------------------------------------- Week Deployment --------------------------------------
+    "{week*-master}":
+      # - step: DEV DEPLOYMENT STEP
+      - step: *weekdev-automated-tests
+      # - step: STAGING DEPLOYMENT STEP
+
+    "{test/**}":
+      - parallel:
+        - step: *dev-automated-tests
+        - step: *staging-automated-tests
+    
