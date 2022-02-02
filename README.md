@@ -20,10 +20,8 @@
 - Mocha BDD
 ### Assertions
 - Chai Expect
-- WebdriverIO Expect
 ### Continuous Testing
 - Bitbucket Pipelines
-  - Running on Linux
 ### Reporters
 - Spec
 - JSON
@@ -36,12 +34,9 @@
 - Visual Studio Code or any preferred IDE
 - Source Tree
 - Git Bash
-- Clone of latest master branch
-  - git clone git@bitbucket.org:ADDIMedicalAB/hope-solution-v1_6.git
-Chrome Browser
 
 ## Setup
-- Open folder using IDE: root/src/automated-tests
+- Open folder using IDE: root/src/webdriverio-pom-mochabdd-framework
 - Install dependencies by running the following script on terminal
   - npm i
 - Test if setup is complete by running the following script on terminal
@@ -98,7 +93,7 @@ Chrome Browser
 - /specs
     - Contains the actual test files
     - This is where the BDD User Story Declarative style is written
-    - Uses Mocha’s Describe and IT BDD style
+    - Uses Mocha’s Describe and It BDD style
         - Describe block contains the User Story 
             - E.g. User can login with valid credentials
         - It block contains the steps or actions needed to suffice the User Story
@@ -106,9 +101,7 @@ Chrome Browser
             - Should be able to input on email and password input field
             - Should be able to login with valid credentials
             - Should be navigated to Dashboard page
-    - ``/specs/monitoring/check-disk-available.spec``
-        - Gets data of HOPE servers and reports to Microsoft Teams
-            - Need a Grafana account. Create a .env file in the root and supply account with "GRAFANA_EMAIL=" and "GRAFANA_PASS="
+   
 
 - /package
     - Contains all project information, dependencies and custom scripts
@@ -123,10 +116,6 @@ Chrome Browser
 
 
 ## Running tests
-Run automated disk check and reporting to ```Monitoring``` channel in Microsoft Teams
-````
-npm run test.check-disks
-````
 Run Regression Testing in Dev
 ````
 npm run test.regression:dev
